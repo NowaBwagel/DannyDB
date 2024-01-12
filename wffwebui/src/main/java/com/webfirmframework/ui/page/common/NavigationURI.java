@@ -20,7 +20,7 @@ public enum NavigationURI {
 
     ADD_ITEM("/ui/user/items/add", false, false, true),
 
-    ITEM_PRICE_HISTORY_CHART("/ui/user/items/pricehistory/{itemId}", false, true, true),
+    ITEM_PRICE_HISTORY_CHART("/ui/user/items/pricehistory", false, true, true),
 
     SAMPLE_TEMPLATE1("/ui/user/sampletemplate1", false, false, true),
 

@@ -1,28 +1,41 @@
 package com.webfirmframework.ui.page.component;
 
+import java.time.Clock;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+
+import org.json.JSONObject;
+
 import com.webfirmframework.ui.page.common.GlobalSTC;
 import com.webfirmframework.ui.page.common.NavigationURI;
 import com.webfirmframework.ui.page.css.Bootstrap5CssClass;
 import com.webfirmframework.ui.page.model.DocumentModel;
 import com.webfirmframework.ui.page.template.SampleTemplate1;
 import com.webfirmframework.ui.page.template.SampleTemplate2;
-import com.webfirmframework.wffweb.tag.html.*;
+import com.webfirmframework.wffweb.tag.html.AbstractHtml;
+import com.webfirmframework.wffweb.tag.html.Br;
+import com.webfirmframework.wffweb.tag.html.H1;
+import com.webfirmframework.wffweb.tag.html.H2;
+import com.webfirmframework.wffweb.tag.html.H6;
+import com.webfirmframework.wffweb.tag.html.Hr;
+import com.webfirmframework.wffweb.tag.html.URIStateSwitch;
 import com.webfirmframework.wffweb.tag.html.attribute.Href;
 import com.webfirmframework.wffweb.tag.html.attribute.Target;
+import com.webfirmframework.wffweb.tag.html.attribute.Type;
 import com.webfirmframework.wffweb.tag.html.attribute.event.mouse.OnClick;
+import com.webfirmframework.wffweb.tag.html.attribute.global.ClassAttribute;
+import com.webfirmframework.wffweb.tag.html.attribute.global.Id;
 import com.webfirmframework.wffweb.tag.html.formsandinputs.Button;
+import com.webfirmframework.wffweb.tag.html.formsandinputs.Input;
+import com.webfirmframework.wffweb.tag.html.html5.attribute.Placeholder;
 import com.webfirmframework.wffweb.tag.html.links.A;
 import com.webfirmframework.wffweb.tag.html.stylesandsemantics.Div;
+import com.webfirmframework.wffweb.tag.html.stylesandsemantics.Span;
 import com.webfirmframework.wffweb.tag.htmlwff.NoTag;
 import com.webfirmframework.wffweb.tag.htmlwff.TagContent;
 import com.webfirmframework.wffweb.util.URIUtil;
 import com.webfirmframework.wffwebcommon.TokenUtil;
-import org.json.JSONObject;
-
-import java.time.Clock;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 public class UserAccountComponent extends Div {
 
@@ -108,7 +121,7 @@ public class UserAccountComponent extends Div {
         new Br(this);
         new Br(this);
 
-        final String priceHistoryURI = NavigationURI.ITEM_PRICE_HISTORY_CHART.getUri(documentModel).replace("{itemId}", "2");
+        final String priceHistoryURI = (NavigationURI.ITEM_PRICE_HISTORY_CHART.getUri(documentModel)+"/{itemId}").replace("{itemId}", "2");
         //navigation using server side setURI method
         new A(this,
                 Bootstrap5CssClass.BTN_PRIMARY.getAttribute(),
@@ -141,6 +154,12 @@ public class UserAccountComponent extends Div {
 
         new Br(this);
         new Br(this);
+        
+        new H2(this).give(TagContent::text, "My To Do List");
+        new Input(this, new Type(Type.TEXT), new Id("myInput"), new Placeholder("Title..."));
+        new Span(this, new ClassAttribute("addBtn")).give(TagContent::text, "Add");
+        new Br(this);
+        new Br(this);
 
 
         URIStateSwitch widgetDiv = new Div(this);
@@ -165,12 +184,12 @@ public class UserAccountComponent extends Div {
                     return new AbstractHtml[]{widgetDivCurrentChild};
                 });
 
-        widgetDiv.whenURI(NavigationURI.ITEM_PRICE_HISTORY_CHART.getPredicate(documentModel),
+        widgetDiv.whenURI(uriEvent -> uriEvent.uriAfter().startsWith(NavigationURI.ITEM_PRICE_HISTORY_CHART.getUri(documentModel)),
                 () -> {
                     documentModel.browserPage().getTagRepository().findTitleTag().give(
                             TagContent::text, "Item Price History | User Account | wffweb demo");
                     //Note: URIUtil class will be available since 12.0.0-beta.2
-                    Map<String, String> pathParams = URIUtil.parseValues(NavigationURI.ITEM_PRICE_HISTORY_CHART.getUri(documentModel), documentModel.browserPage().getURI());
+                    Map<String, String> pathParams = URIUtil.parseValues(NavigationURI.ITEM_PRICE_HISTORY_CHART.getUri(documentModel) + "/{itemId}", documentModel.browserPage().getURI());
                     long itemId = 0;
                     try {
                         itemId = Long.parseLong(pathParams.get("itemId"));

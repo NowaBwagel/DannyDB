@@ -20,7 +20,7 @@ public final class ServerConstants {
 
     public static final boolean ENABLE_HEARTBEAT;
 
-    private static final String LOCAL_MACHINE_IP = "localhost";
+    private static final String LOCAL_MACHINE_IP = "192.168.1.212";
 
     public static final String LOCAL_MACHINE_PORT;
 
